@@ -1,0 +1,41 @@
+{
+	"info": {
+		"_postman_id": "88b34a87-c9c7-4093-bdfe-8f06df392648",
+		"name": "OneTwoTripRedirect",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://onetwotrip.com",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "28e5b045-4be6-45c9-87c1-76046fb439f7",
+						"exec": [
+							"pm.test(\"Произошел редирект на новый ресурс\", function () {\r",
+							"    pm.response.to.have.status(301);\r",
+							"    pm.expect(pm.response.headers.get('location')).to.eql('https://www.onetwotrip.com/');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://onetwotrip.com",
+					"protocol": "https",
+					"host": [
+						"onetwotrip",
+						"com"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

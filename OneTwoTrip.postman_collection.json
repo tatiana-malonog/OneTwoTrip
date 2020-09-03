@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "f8192bd3-e131-4bff-9fe0-53f75d9fc188",
+		"name": "OneTwoTrip",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://www.onetwotrip.com/_bus/geo/suggest?limit=10&query=%D0%93%D1%80%D0%BE%D0%B7%D0%BD%D1%8B%D0%B9",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9f258dfc-9c11-4fbe-9ce7-dc95f05f432a",
+						"exec": [
+							"pm.test(\"Статус ответа 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"В ответе возвращается структура объекта\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"В ответе возвращаются верные типы данных для всех значений\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.data).to.be.an('array');\r",
+							"    pm.expect(jsonData.data[0].name).to.be.a('string');\r",
+							"    pm.expect(jsonData.data[0].district).to.be.null;\r",
+							"    pm.expect(jsonData.data[0].region).to.be.a('string');\r",
+							"    pm.expect(jsonData.data[0].country).to.be.a('string');\r",
+							"    pm.expect(jsonData.data[0].rating).to.be.a('number');\r",
+							"    pm.expect(jsonData.data[0].geopointId).to.be.a('number');\r",
+							"    pm.expect(jsonData.data[0].trnslt).to.be.a('string');\r",
+							"    pm.expect(jsonData.data[0].type).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"В ответе возвращается информация о городе отправления\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.data[0].name).to.eql('Грозный');\r",
+							"    pm.expect(jsonData.data[0].district).to.be.null;\r",
+							"    pm.expect(jsonData.data[0].region).to.eql('Чеченская Республика');\r",
+							"    pm.expect(jsonData.data[0].country).to.eql('Россия');\r",
+							"    pm.expect(jsonData.data[0].rating).to.eql(1.7);\r",
+							"    pm.expect(jsonData.data[0].geopointId).to.eql(203);\r",
+							"    pm.expect(jsonData.data[0].trnslt).to.eql('groznyi-203');\r",
+							"    pm.expect(jsonData.data[0].type).to.eql('');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Время ответа на запрос менее 100 ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Ответ вернулся в формате json\", function () {     \r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.onetwotrip.com/_bus/geo/suggest?limit=10&query=%D0%93%D1%80%D0%BE%D0%B7%D0%BD%D1%8B%D0%B9",
+					"protocol": "https",
+					"host": [
+						"www",
+						"onetwotrip",
+						"com"
+					],
+					"path": [
+						"_bus",
+						"geo",
+						"suggest"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "query",
+							"value": "%D0%93%D1%80%D0%BE%D0%B7%D0%BD%D1%8B%D0%B9"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://www.onetwotrip.com/_bus/geo/suggest?query=%D0%93%D1%80%D0%BE%D0%B7&limit=10",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f94159fb-c1c9-4f6e-b6bd-94f21031abe6",
+						"exec": [
+							"pm.test(\"В ответе возвращаются найденные города по сопадению первых введенных символов\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.data).to.be.an('array');\r",
+							"    pm.expect(jsonData.data).to.have.lengthOf(5);\r",
+							"\r",
+							"    let actualCities = [];\r",
+							"    for (let i = 0; i < (jsonData.data).length; i++) {\r",
+							"        actualCities.push(jsonData.data[i].name);\r",
+							"    }\r",
+							"\r",
+							"    let expectedCities = [\"Грозный\", \"Грозов\", \"Грозово\", \"Грозовое\", \"Грозовок\"];\r",
+							"\r",
+							"    pm.expect(actualCities).to.eql(expectedCities);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.onetwotrip.com/_bus/geo/suggest?query=%D0%93%D1%80%D0%BE%D0%B7&limit=10",
+					"protocol": "https",
+					"host": [
+						"www",
+						"onetwotrip",
+						"com"
+					],
+					"path": [
+						"_bus",
+						"geo",
+						"suggest"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "%D0%93%D1%80%D0%BE%D0%B7"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://www.onetwotrip.com/_bus/geo/suggest?query=%23&limit=10",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3cf01dad-42fd-469b-859a-807636cde34e",
+						"exec": [
+							"pm.test(\"В ответе возвращается пустой массив при отсутствии совпадений по городам\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.data).to.be.an('array');\r",
+							"    pm.expect(jsonData.data).to.be.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.onetwotrip.com/_bus/geo/suggest?query=%23&limit=10",
+					"protocol": "https",
+					"host": [
+						"www",
+						"onetwotrip",
+						"com"
+					],
+					"path": [
+						"_bus",
+						"geo",
+						"suggest"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "%23"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://www.onetwotrip.com/bus/geo/suggest?query=%D0%9D&limit=10",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f816e8fc-aea7-4931-b16b-fc58c74fd2a4",
+						"exec": [
+							"pm.test(\"Статус ответа 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.onetwotrip.com/bus/geo/suggest?query=%D0%9D&limit=10",
+					"protocol": "https",
+					"host": [
+						"www",
+						"onetwotrip",
+						"com"
+					],
+					"path": [
+						"bus",
+						"geo",
+						"suggest"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "%D0%9D"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "f53e674a-8f9b-4454-a939-7b2fa1f2ae97",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ce33c1f4-3274-454f-8ceb-56964db65496",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
