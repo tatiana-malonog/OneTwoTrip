@@ -1,0 +1,4 @@
+pm.test("Произошел редирект на новый ресурс", function () {
+    pm.response.to.have.status(301);
+    pm.expect(pm.response.headers.get('location')).to.eql('https://www.onetwotrip.com/');
+});

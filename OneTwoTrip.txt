@@ -1,0 +1,67 @@
+pm.test("Статус ответа 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("В ответе возвращается структура объекта", function () {
+    var jsonData = JSON.parse(responseBody);
+    pm.expect(jsonData).to.be.an('object');
+});
+
+pm.test("В ответе возвращаются верные типы данных для всех значений", function () {
+    var jsonData = JSON.parse(responseBody);
+    pm.expect(jsonData.data).to.be.an('array');
+    pm.expect(jsonData.data[0].name).to.be.a('string');
+    pm.expect(jsonData.data[0].district).to.be.null;
+    pm.expect(jsonData.data[0].region).to.be.a('string');
+    pm.expect(jsonData.data[0].country).to.be.a('string');
+    pm.expect(jsonData.data[0].rating).to.be.a('number');
+    pm.expect(jsonData.data[0].geopointId).to.be.a('number');
+    pm.expect(jsonData.data[0].trnslt).to.be.a('string');
+    pm.expect(jsonData.data[0].type).to.be.a('string');
+});
+
+pm.test("В ответе возвращается информация о городе отправления", function () {
+    var jsonData = JSON.parse(responseBody);
+    pm.expect(jsonData.data[0].name).to.eql('Грозный');
+    pm.expect(jsonData.data[0].district).to.be.null;
+    pm.expect(jsonData.data[0].region).to.eql('Чеченская Республика');
+    pm.expect(jsonData.data[0].country).to.eql('Россия');
+    pm.expect(jsonData.data[0].rating).to.eql(1.7);
+    pm.expect(jsonData.data[0].geopointId).to.eql(203);
+    pm.expect(jsonData.data[0].trnslt).to.eql('groznyi-203');
+    pm.expect(jsonData.data[0].type).to.eql('');
+});
+
+pm.test("Время ответа на запрос менее 100 ms", () => {
+    pm.expect(pm.response.responseTime).to.be.below(100);
+});
+
+pm.test("Ответ вернулся в формате json", function () {     
+     pm.response.to.be.withBody;
+     pm.response.to.be.json;
+});
+
+pm.test("В ответе возвращаются найденные города по сопадению первых введенных символов", function () {
+    var jsonData = JSON.parse(responseBody);
+    pm.expect(jsonData.data).to.be.an('array');
+    pm.expect(jsonData.data).to.have.lengthOf(5);
+
+    let actualCities = [];
+    for (let i = 0; i < (jsonData.data).length; i++) {
+        actualCities.push(jsonData.data[i].name);
+    }
+
+    let expectedCities = ["Грозный", "Грозов", "Грозово", "Грозовое", "Грозовок"];
+
+    pm.expect(actualCities).to.eql(expectedCities);
+});
+
+pm.test("В ответе возвращается пустой массив при отсутствии совпадений по городам", function () {
+    var jsonData = JSON.parse(responseBody);
+    pm.expect(jsonData.data).to.be.an('array');
+    pm.expect(jsonData.data).to.be.empty;
+});
+
+pm.test("Статус ответа 404", function () {
+    pm.response.to.have.status(404);
+});
